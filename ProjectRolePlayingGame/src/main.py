@@ -25,6 +25,7 @@ def personnage_creer():
     features_names = tfidf.get_feature_names()
     for col in response.nonzero()[1]:
         Label(histoire, text = "{} - {}".format(features_names[col], response[0, col])).pack()
+    # return Character, tf_idf bio
 
 def compute_TF(word_dict, bow):
     tf_dict = {}

@@ -1,10 +1,10 @@
 class Character(object):
     ''' Character creation class
-    
+        nom, origine, age, race, bio
     '''
-    def __init__(self, name=None, where=None):
+    def __init__(self, name, birthplace):
         self.name = name
-        self.where = where
+        self.birthplace = birthplace
 
     ''' Get the name of the character
     '''
@@ -18,15 +18,15 @@ class Character(object):
 
     ''' Get the origin of the character
     '''
-    def get_where(self):
-        return self.where
+    def get_birthplace(self):
+        return self.birthplace
 
     ''' Set the origin of the character
     '''
-    def set_where(self, where):
-        self.where = where
+    def set_birthplace(self, birthplace):
+        self.birthplace = birthplace
 
     ''' Represent a brief description of the character
     '''
     def __str__(self):
-        return self.name + " from " + self.where
+        return self.name + " from " + self.birthplace
