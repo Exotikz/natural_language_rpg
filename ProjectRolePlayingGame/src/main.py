@@ -1,36 +1,21 @@
 import os
 import sys
+import codecs
 import math
 from tkinter import *
 
-from sklearn.feature_extraction.text import TfidfVectorizer
 from character.Character import *
+from util.Serialization import *
 
-def personnage_creer():
-    histoire = LabelFrame(fiche, text = "Information", padx = 20, pady = 20)
-    histoire.pack(fill = "both", expand = "yes")
-    char = Character(nom_entry.get(), where_entry.get(), age_entry.get(), race_entry.get(), bio_entry.get(1.0, END))
-
-    tfidf = TfidfVectorizer()
-    raw_origine = bio_entry.get(1.0, END)
-    origine_phrases = raw_origine.split(".")
-    phrase = []
-    for phrases in origine_phrases:
-        phrase.append(phrases)
-    response = tfidf.fit_transform(phrase)
-
-    Label(histoire, text = "Nom : {}".format(char.get_name())).pack()
-    Label(histoire, text = "Origine : {}".format(char.get_birthplace())).pack()
-    Label(histoire, text = "Age : {}".format(char.get_age())).pack()
-    Label(histoire, text = "Race : {}".format(char.get_race())).pack()
-    
-    features_names = tfidf.get_feature_names()
-    for col in response.nonzero()[1]:
-        Label(histoire, text = "{} - {}".format(features_names[col], response[0, col])).pack()
-    # return Character, tf_idf bio
+def create_character():
+    # @TO_DO: check if the input is correct.
+    print("Character created.")
+    return Character(nom_entry.get(), where_entry.get(), age_entry.get(), race_entry.get(), bio_entry.get(1.0, END))
 
 
 if __name__ == "__main__":
+    #@TO_DO: Ménagerie
+
     # Programme principale
     main_window = Tk()
     # Titre de la fenetre
@@ -65,7 +50,7 @@ if __name__ == "__main__":
     bio_entry = Text(questionnaire, width = 100)
 
     # Boutton créer
-    create_button = Button(questionnaire, text = "Créer", command=personnage_creer)
+    create_button = Button(questionnaire, text = "Créer", command=create_character)
 
     nom_label.pack()
     nom_entry.pack()
@@ -84,12 +69,28 @@ if __name__ == "__main__":
     create_button.pack()
 
     # Test char & serialize
-    char = Character("Jason", "MURICA", 1776, "humanoid", "Fuck yeah")
-    print(char)
-    print(char.serialize())
+    warrior = ""
+    with codecs.open("natural_language_rpg/ProjectRolePlayingGame/src/util/warrior.txt", 'r', encoding='utf8') as f:
+        warrior = f.read()
+    mage = ""
+    with codecs.open("natural_language_rpg/ProjectRolePlayingGame/src/util/mage.txt", 'r', encoding='utf8') as f:
+        mage = f.read()
+    ranger = ""
+    with codecs.open("natural_language_rpg/ProjectRolePlayingGame/src/util/ranger.txt", 'r', encoding='utf8') as f:
+        ranger = f.read()
+    
+    char = Character("Test", "TEST", 1082, "humain", warrior)
+    print("Il semblerait que la classe de votre personnage soit {}.".format(char.guess_the_class()))
+
+    with codecs.open("natural_language_rpg/ProjectRolePlayingGame/src/character/warrior.txt", 'w', encoding='utf8') as f:
+        serialize_character(char, f)
+
+    with codecs.open("natural_language_rpg/ProjectRolePlayingGame/src/character/warrior.txt", 'r', encoding='utf8') as f:
+        warrior_character = deserialize_character(f)
+        print(warrior_character)
 
     questionnaire.pack(side = LEFT)
     fiche.pack(side = RIGHT)
 
     # Execution
-    main_window.mainloop()
+    # main_window.mainloop()
