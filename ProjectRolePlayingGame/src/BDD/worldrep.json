@@ -1,0 +1,105 @@
+{
+	"root": {
+		"world": {
+			"characters": [{
+					"id": 0,
+					"name": "Test1",
+					"birthyear": "1991",
+					"bio": "",
+
+					"race": "human",
+
+					"relationships": {
+						"birthplace": 0,
+						"grewUpIn": 0
+					}
+				},
+
+				{
+					"id": 1,
+					"name": "Test2",
+					"birthyear": "2000",
+					"bio": "",
+
+					"race": "orc",
+
+					"relationships": {
+						"birthplace": 0,
+						"grew_up_in": 0
+					}
+				}
+			],
+
+			"places": [{
+				"id": 0,
+				"name": "Villetown",
+				"description": "",
+				"coordinates": [105.0, 21.5],
+
+				"relationships": {
+
+				}
+			}],
+			"events": []
+		},
+
+		"links": {
+			"grew_up_in": {
+				"parameters": [
+					"places"
+				]
+			},
+
+			"sibling_of": {
+				"parameters": [
+					"characters"
+				]
+			},
+
+			"knows": {
+				"parameters": [
+					"characters"
+				]
+			}
+		},
+
+		"rules": {
+			"classes": {
+				"warrior": {
+					"keywords": [
+						"guerrier", "soldat", "gladiateur",
+						"solide", "force", "fort", "forte", "grand",
+						"grande", "herculéen", "hérculéenne", "sabre",
+						"épée", "bouclier", "lance", "hache", "masse",
+						"massue", "corps à corps", "mélée", "front",
+						"première ligne"
+					]
+				},
+				"mage": {
+					"keywords": [
+						"mage", "esprit", "intelligence",
+						"intelligent", "intelligente", "sorcier", "sorcière",
+						"magicien", "magicienne", "bâton", "baguette",
+						"livre d'incantation", "magie", "éléments", "mana",
+						"énérgie", "sorcellerie", "sort", "incantation"
+					]
+				},
+				"ranger": {
+					"keywords": [
+						"chasseur", "chasseresse", "rôdeur",
+						"rôdeuse", "gardien", "sauvage", "agile", "dompteur",
+						"animal", "imprévisible", "arc", "flèche", "carquois",
+						"arbalète", "carreau", "dague", "couteau", "animaux",
+						"piège", "camouflage", "dissimulation", "forêt",
+						"bois"
+					]
+				}
+			},
+			"races": {
+				"human": {},
+				"dwarf": {},
+				"elf": {}
+			}
+		}
+	}
+}
