@@ -2,95 +2,80 @@ import os
 import sys
 import codecs
 import math
-from tkinter import *
+import pprint
 
-from character.Character import *
 from util.Serialization import *
+from character.Character import *
+from util.MongoDB import query_collection
+from util.InputVerification import *
 
 def create_character():
-    # @TO_DO: check if the input is correct.
-    print("Character created.")
-    return Character(nom_entry.get(), where_entry.get(), age_entry.get(), race_entry.get(), bio_entry.get(1.0, END))
+    print("Veuillez entrer un nom : ")
+    name = correct_str_input()
+    print("Saisissez maintenant une description de votre personnage : ")
+    desc = correct_str_input()
+    character = Character(name, "None", "None", "None", "None", desc)
+    print("Il semblerait que votre personne soit ", character.guess_the_class())
+    is_right_class = yes_no_question("Est-ce correcte ?")
+    if is_right_class :
+        character.set_classe(character.guess_the_class())
+    else:
+        print("Quelle est sa classe ? :")
+        character.set_classe(correct_str_input())
 
+    print("Il semblerait que votre personne soit agé de : ", character.guess_the_age())
+    is_right_age = yes_no_question("Est-ce correcte ?")
+    if is_right_age :
+        character.set_birthdate(character.guess_the_age())
+    else:
+        print("Quelle est son age ? :")
+        character.set_classe(correct_int_input())
+
+    return character
 
 if __name__ == "__main__":
-    #@TO_DO: Ménagerie
+    print("Bienvenue sur NLRPG !")
+    char = create_character()
+    print(char)
 
-    # Programme principale
-    main_window = Tk()
-    # Titre de la fenetre
-    main_window.title("Projet Annuel")
-
-    # Partie gauche
-    questionnaire = Frame(main_window)
-    # Partie droite
-    fiche = Frame(main_window)
-    # Le nom
-    nom_label = Label(questionnaire, text="Nom")
-    nom = StringVar()
-    nom.set("Grom")
-    nom_entry = Entry(questionnaire, textvariable = nom, width = 50)
-    # La provenance
-    where_label = Label(questionnaire, text="Origine")
-    where = StringVar()
-    where.set("Bricquebec")
-    where_entry = Entry(questionnaire, textvariable = where, width = 50)
-    # L'age
-    age_label = Label(questionnaire, text="Age")
-    age = StringVar()
-    age.set("29")
-    age_entry = Entry(questionnaire, textvariable = age, width = 50)
-    # La race
-    race_label = Label(questionnaire, text="Race")
-    race = StringVar()
-    race.set("Human")
-    race_entry = Entry(questionnaire, textvariable = race, width = 50)
-    # La bio
-    bio_label = Label(questionnaire, text = "Biographie")
-    bio_entry = Text(questionnaire, width = 100)
-
-    # Boutton créer
-    create_button = Button(questionnaire, text = "Créer", command=create_character)
-
-    nom_label.pack()
-    nom_entry.pack()
-
-    where_label.pack()
-    where_entry.pack()
     
-    age_label.pack()
-    age_entry.pack()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # # Test char & serialize
+    # warrior = ""
+    # with codecs.open("ProjectRolePlayingGame/src/util/warrior.txt", 'r', encoding='utf8') as f:
+    #     warrior = f.read()
+    # mage = ""
+    # with codecs.open("ProjectRolePlayingGame/src/util/mage.txt", 'r', encoding='utf8') as f:
+    #     mage = f.read()
+    # ranger = ""
+    # with codecs.open("ProjectRolePlayingGame/src/util/ranger.txt", 'r', encoding='utf8') as f:
+    #     ranger = f.read()
     
-    race_label.pack()
-    race_entry.pack()
+    # char = Character("Test", "TEST", 1082, "humain", warrior)
+    # print("Il semblerait que la classe de votre personnage soit {}.".format(char.guess_the_class()))
 
-    bio_label.pack()
-    bio_entry.pack()
-    create_button.pack()
-
-    # Test char & serialize
-    warrior = ""
-    with codecs.open("natural_language_rpg/ProjectRolePlayingGame/src/util/warrior.txt", 'r', encoding='utf8') as f:
-        warrior = f.read()
-    mage = ""
-    with codecs.open("natural_language_rpg/ProjectRolePlayingGame/src/util/mage.txt", 'r', encoding='utf8') as f:
-        mage = f.read()
-    ranger = ""
-    with codecs.open("natural_language_rpg/ProjectRolePlayingGame/src/util/ranger.txt", 'r', encoding='utf8') as f:
-        ranger = f.read()
-    
-    char = Character("Test", "TEST", 1082, "humain", warrior)
-    print("Il semblerait que la classe de votre personnage soit {}.".format(char.guess_the_class()))
-
-    with codecs.open("natural_language_rpg/ProjectRolePlayingGame/src/character/warrior.txt", 'w', encoding='utf8') as f:
-        serialize_character(char, f)
-
-    with codecs.open("natural_language_rpg/ProjectRolePlayingGame/src/character/warrior.txt", 'r', encoding='utf8') as f:
-        warrior_character = deserialize_character(f)
-        print(warrior_character)
-
-    questionnaire.pack(side = LEFT)
-    fiche.pack(side = RIGHT)
-
-    # Execution
-    # main_window.mainloop()
+    # print(warrior)
+    # # for word in warrior:
+    # #     print(word)

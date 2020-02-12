@@ -1,0 +1,281 @@
+\documentclass[
+    12pt,
+	headsepline=on,
+	footsepline=on,
+	twoside=off,
+	abstract=on,
+	DIV=10
+]{scrreprt}
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[english, french]{babel}
+\usepackage{multirow}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[allbordercolors=white]{hyperref}
+\usepackage{mdframed}
+\usepackage{pgfplotstable}
+\usepackage{tikz-3dplot}
+\usepackage[OT1]{fontenc}
+\usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage{lscape} % permet de faire des pages en mode paysage
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage[sfdefault]{cabin}
+
+\lstset{
+    basicstyle=\ttfamily,
+    breaklines=true,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+    language=Java,
+    tabsize=4,
+    numbers=left,
+ 	numberstyle=\tiny,
+ 	keywordstyle=\color{blue}\bfseries,
+ 	captionpos=b
+}
+
+\definecolor{link}{HTML}{4169E1}
+\usepackage[bottom=2cm,footskip=8mm]{geometry}
+
+\newmdenv[
+    rightline=false,
+    topline=false,
+    bottomline=false,
+    backgroundcolor=BurntOrange!5,
+    fontcolor=BrickRed,
+    linecolor=Red,
+    linewidth=1pt
+]{problemenv}
+
+\newcommand{\problem}[1]{
+\begin{problemenv}
+\sffamily
+#1
+\end{problemenv}
+}
+
+\newmdenv[
+    rightline=false,
+    topline=false,
+    bottomline=false,
+    backgroundcolor=ForestGreen!5,
+    fontcolor=OliveGreen,
+    linecolor=Green,
+    linewidth=1pt
+]{resultenv}
+
+\newcommand{\result}[1]{
+\begin{resultenv}
+\sffamily
+#1
+\end{resultenv}
+}
+
+\newmdenv[
+rightline=false,
+topline=false,
+bottomline=false,
+backgroundcolor=Cyan!5,
+fontcolor=Blue,
+linecolor=NavyBlue,
+linewidth=1pt]{infoenv}
+
+\newcommand{\info}[1]{
+\begin{infoenv}
+\sffamily
+#1
+\end{infoenv}
+}
+
+\newcommand{\img}[1]{
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{#1}	
+\end{figure}
+}
+
+\newcommand{\imgwlegend}[2]{
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1\textwidth]{#1}	
+		\caption{#2}
+	\end{figure}
+}
+
+\newcommand{\imgwlegendwithwidth}[3]{
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=#3\textwidth]{#1}	
+		\caption{#2}
+	\end{figure}
+}
+
+% Gestion d'abstracts multiples
+
+\newenvironment{abstractpage}
+{\cleardoublepage\vspace*{\fill}\thispagestyle{empty}}
+{\vfill\cleardoublepage}
+
+\renewenvironment{abstract}[1]
+{\bigskip\selectlanguage{#1}%
+	\begin{center}\bfseries\abstractname\end{center}}
+{\par\bigskip}
+
+% Gestion des keywords
+
+\newcommand{\keywords}{\sffamily\textit{Keywords : }\bfseries}
+
+%Page style
+
+\pagestyle{headings}
+\pagenumbering{arabic}
+
+
+%Title page
+
+\titlehead{
+	\includegraphics[width=0.25\textwidth]{img/UNICAEN-logo-NOIR-horizontal.png}
+	\hfill
+	%\includegraphics[width=0.25\textwidth]{pics/}
+}
+\subject{
+	\small
+	Université de Caen Normandie\\
+	UFR des Sciences\\
+	Département Informatique\\
+	\hfill\\
+	1\up{ère} année de master
+}
+\title{
+	\hrulefill
+	%\hrulefill
+	\vfill
+	\Huge \bfseries COÉCRITURE EN LANGAGE NATUREL
+}
+\subtitle{
+	Rapport de projet\\
+	\hfill
+	\\
+	\hrulefill
+	\hfill\\
+}
+\author{
+	\small
+	\includegraphics[ height=0.12\textheight, width=0.35\textwidth, keepaspectratio]{img/greyc}\\
+	\hfill\\
+	Jérôme LEGRIFFON, Anne WARTELLE
+}
+\date{}
+\publishers{
+	\small
+	\begin{minipage}{0.6\textwidth}
+		Tuteur : Loïs VANHÉE
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.35\textwidth}
+		Année 2019 - 2020\\
+	\end{minipage}
+}
+
+\newcommand{\placeholderwarning}{
+\problem{CECI EST UN PLACEHOLDER. À REMPLACER AVEC LES DONNÉES INDIQUÉES.}
+}
+
+\makeglossary
+%redaction guide -> https://docs.google.com/document/d/1YfxGWD0GbRxs-OLxRxoA8Sg8OuVYTSKK8HX1ScFYlFA
+\begin{document}
+
+	\maketitle
+	
+	\pagenumbering{roman} 
+	
+	\tableofcontents
+	
+	\chapter*{Remerciements}
+		\paragraph{} 
+			Nous tenons à remercier notre tuteur de projet M. Loïs VANHÉE pour nous avoir formé et accompagné tout au long de cette expérience avec beaucoup de patience et de pédagogie, mon tuteur de stage M. Bruno ZANUTTINI pour ses conseils et explications, Christopher JACQUIOT pour son template \LaTeX.
+			\clearpage
+	
+	\pagenumbering{arabic}
+
+    \input{chapters/intro.tex}
+    \input{chapters/outils.tex}
+    \input{chapters/architecture.tex}
+    \input{chapters/realisation.tex}
+    \input{chapters/difficulties.tex}
+    \input{chapters/perspectives.tex}
+    \input{chapters/conlusion.tex}
+	\cleardoublepage
+	\pagebreak
+	
+	\pagenumbering{Roman}
+	
+	\begin{thebibliography}{}
+	    \bibitem{test-et-junit4}
+	    Bruno MERMET
+	    Tests et Junit 4
+        \url{https://mermet.users.greyc.fr/Enseignement/CoursPDF/JUnit.pdf}
+        
+        \bibitem{git}
+	    Bruno MERMET (2017)
+	    Gestion de version avec GIT
+        \url{https://mermet.users.greyc.fr/Enseignement/CoursPDF/gestionVersion-partie1.pdf}
+        
+        \bibitem{maven}
+	    Bruno MERMET (novembre 2017)
+	    Construction et gestion de développement avec Maven 3.0
+        \url{https://mermet.users.greyc.fr/Enseignement/CoursPDF/maven.pdf}
+        
+        \bibitem{test-validation-logiciel}
+	    Bruno MERMET (2010)
+	    Le Test dans la validation du logiciel
+        \url{https://mermet.users.greyc.fr/Enseignement/CoursPDF/testLogiciel.pdf}
+        
+        \bibitem{tutorials-point}
+        tutorials point
+        JUnit - Parameterized Test
+        \url{https://www.tutorialspoint.com/junit/junit_parameterized_test.htm}
+        
+	\end{thebibliography}
+
+%	\chapter{PARTIE}
+	
+%	\section{Nécessités}
+	
+%	\paragraph{}
+	
+%	\section{Problème}
+	
+%	\paragraph{}
+	
+%	\begin{problem}
+	
+%	\end{problem}
+	
+%	\section{Approches possibles}
+	
+%	\paragraph{}
+	
+%	\section{Approche utilisée}
+	
+%	\paragraph{}
+	
+%	\begin{result}
+	
+%	\end{result}
+	
+%	\section{Remarques sur les résultats obtenus}
+	
+%	\paragraph{}
+	
+%	\section{Pistes d'amélioration}
+	
+%	\paragraph{}
+	
+	
+\end{document}

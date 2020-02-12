@@ -3,12 +3,25 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Ignore the db
+/ProjectRolePlayingGame/resources/db/*
+
 # User-specific files
 *.rsuser
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
+
+# Latex related
+*.aux
+*.fdb_latexmk
+*.fls
+*.glo
+*.out
+*.toc
+*.synctex.gz
+*.pdf
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

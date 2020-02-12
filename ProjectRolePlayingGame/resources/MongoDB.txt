@@ -1,0 +1,1 @@
+La DB se trouve : ProjectRolePlayingGame\resources\db

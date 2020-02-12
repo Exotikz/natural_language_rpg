@@ -1,19 +1,18 @@
 import nltk
 from nltk.corpus import stopwords
 
-# French
+# Français
 french_stopwords = set(nltk.corpus.stopwords.words('french'))
 
-def term_frequency(text):
+def raw_text(text):
     words = nltk.word_tokenize(text)
-    # remove single char and punctuation
+    # enlève les lettres seules et la ponctuations
     words = [word for word in words if len(word) > 1]
-    # remove numbers
-    words = [word for word in words if not word.isnumeric()]
-    # lower
+    # lower case
     words = [word.lower() for word in words]
-    # remove stop words
-    words = [word for word in words if word not in french_stopwords]
+    # enlève les "stop words"
+    return [word for word in words if word not in french_stopwords]
 
-    # frequency
-    return nltk.FreqDist(words)
+def term_frequency(text):
+    # fréquence
+    return nltk.FreqDist(raw_text(text))
