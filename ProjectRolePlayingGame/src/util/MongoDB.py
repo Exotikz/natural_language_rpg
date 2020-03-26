@@ -3,7 +3,7 @@ from pymongo import MongoClient
 # https://docs.mongodb.com/v2.6/reference/sql-comparison/
 class MongoDBConnection(object):
     """MongoDB Connection"""    
-
+    # mongod.exe --dbpath="ProjectRolePlayingGame/resources/db"
     def __init__(self, host='localhost', port=27017):
         self.host = host
         self.port = port
@@ -36,3 +36,9 @@ def insert_to_collection(db, collection, element):
     """
     with MongoDBConnection() as mongo:
         return mongo.connect_to_db(db)[collection].insert_one( element )
+
+def update_to_collection(db, collection, where, element):
+    """ Updating the object
+    """
+    with MongoDBConnection() as mongo:
+        return mongo.connect_to_db(db)[collection].update( where, element )

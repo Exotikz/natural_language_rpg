@@ -1,11 +1,20 @@
+import os
 from typing import List
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.corpus import stopwords
 from nltk.probability import FreqDist
 
+from nltk.tag import StanfordPOSTagger
+# Make your java path
+java_path = "E:/Programmes/Java/java-se-8u41-ri/bin/java.exe"
+os.environ['JAVAHOME'] = java_path
+# ===========================
+# https://nlp.stanford.edu/software/tagger.shtml#Download
+# ===========================
 # ! Absolument nécessaire de lancer au moins une fois :
 # ! nltk.download()
-# ! nltk.download("stopwords") 
+# ! nltk.download("stopwords")
+# ! nltk.download('averaged_perceptron_tagger')
 # ! pour que la suite fonctionne.
 # Français
 french_stopwords = set(stopwords.words('french'))

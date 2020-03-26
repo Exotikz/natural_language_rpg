@@ -1,15 +1,18 @@
 import re
 from typing import List
-from util.NLTK_lib import term_frequency, term_frequency_without_stop_words, split_sentences, split_words
+from util.NLTK_lib import *
+from nltk.tag import pos_tag
 from util.MongoDB import query_specific_element
+from world.World import *
 
 class Character:
     """ Character creation class """
 
-    def __init__(self, name: str, birthplace: str, age: int, race: str, gender: str, classe: str, bio: str):
+    def __init__(self, name: str, birthplace: str, age: int, race: str, gender: str, classe: str, bio: str, id = None):
         self.name = name
         self.birthplace = birthplace
         self.age = age
+        self.id = id
         self.race = race
         self.gender = gender
         self.classe = classe
@@ -38,6 +41,14 @@ class Character:
     def set_age(self, age: int):
         """ Set the age of the character """
         self.age = age
+        self.set_id(self.name+str(self.age))
+
+    def get_id(self) -> str:
+        return self.id
+
+    def set_id(self, id: str):
+        if self.id == None:
+            self.id = id
 
     def get_race(self) -> str:
         """ Get the race of the character """
@@ -79,7 +90,21 @@ class Character:
         # split into phrases
         phrases: List[str] = split_sentences(self.bio)
         # isolating phrases including keywords related to age
-        phrases = list(filter(lambda x: x.find("ans") != -1 or x.find("années") != -1, phrases))
+        phrases = list(
+            filter(
+                lambda x:
+                x.find("an") != -1 or
+                x.find("anniversaire") != -1 or
+                x.find("ans") != -1 or
+                x.find("année") != -1 or
+                x.find("années") != -1 or
+                x.find("hivers") != -1 or
+                x.find("printemps") != -1 or
+                x.find("étés") != -1 or
+                x.find("automnes") != -1,
+                phrases
+            )
+        )
         phrase_with_age: str = ""
         if (len(phrases) == 1):
             phrase_with_age = phrases[0]
@@ -87,9 +112,9 @@ class Character:
             for phrase in phrases:
                 #? On imagine impossible que l'age soit inférieur à 0 ou
                 #? supérieur à 150
-                temp_int: int = re.search(r'\d+', phrase)
+                temp_int = re.search(r'\d+', phrase)
                 if temp_int:
-                    if (int(temp_int) >= 0 and int(temp_int) < 151):
+                    if (int(temp_int.group()) >= 0 and int(temp_int.group()) < 151):
                         phrase_with_age = phrase
             
         if re.search(r'\d+', phrase_with_age):
@@ -163,3 +188,81 @@ class Character:
                 return "rôdeuse"
         else:
             return "non détérminée"
+
+    def guess_the_race(self) -> str:
+        # * frequency from nltk
+        freq = term_frequency_without_stop_words(self.bio)
+        
+        # * Data
+        human: List[str] = ["humain", "humaine", "humains", "humaines", "Humain", "Humaine", "Humains", "Humaines", "Homme"]
+        elve: List[str] = ["elfe", "elfes", "Elfe", "Elfes"]
+        orc: List[str] = ["orc", "orcs", "Orc", "Orcs"]
+        dwarf: List[str] = ["nain", "naine", "nains", "naines", "Nain", "Naine", "Nains", "Naines"]
+
+        # * counting
+        freq_human: float = 0
+        freq_elve: float = 0
+        freq_orc: float = 0
+        freq_dwarf: float = 0
+        for word, frequency in freq.most_common(30):
+            if (word in human): freq_human += frequency
+            elif (word in elve): freq_elve += frequency
+            elif (word in orc): freq_orc += frequency
+            elif (word in dwarf): freq_dwarf += frequency
+
+        if (freq_human > freq_elve and freq_human > freq_orc and freq_human > freq_dwarf):
+            if self.gender == "masculin":
+                return "humain"
+            else:
+                return "humaine"
+        elif (freq_elve > freq_human and freq_elve > freq_orc and freq_elve > freq_dwarf):
+            return "elfe"
+        elif (freq_orc > freq_human and freq_orc > freq_elve and freq_orc > freq_dwarf):
+            return "orc"
+        elif (freq_dwarf > freq_human and freq_dwarf > freq_elve and freq_dwarf > freq_orc):
+            if self.gender == "masculin":
+                return "nain"
+            else:
+                return "naine"
+        else:
+            return "humain"
+
+    def guess_the_birthplace(self):
+        phrases = split_sentences(self.bio)
+        # isolating phrases including keywords related to the birthplace
+        phrases = list(
+            filter(
+                lambda x: x.find("vient de") != -1
+                or x.find("vient") != -1
+                or x.find("il vient") != -1
+                or x.find("Il vient") != -1
+                or x.find("Elle vient") != -1
+                or x.find("elle vient") != -1
+                or x.find("a grandi") != -1
+                or x.find("grandir") != -1
+                or x.find("est de") != -1
+                or x.find("né") != -1
+                or x.find("Né") != -1
+                or x.find("née") != -1
+                or x.find("Née") != -1
+                or x.find("né à") != -1
+                or x.find("Né à") != -1
+                or x.find("née à") != -1
+                or x.find("Née à") != -1
+                or x.find("origine") != -1,
+                phrases
+            )
+        )
+        phrases = [word[0].lower() + word[1:] for word in phrases]
+        possible_origin = []
+        for phrase in phrases:
+            tagged_sentence = pos_tag(split_words(phrase))
+            possible_origin = [word for word, pos in tagged_sentence if pos == 'NNP']
+        if len(possible_origin) == 1:
+            return possible_origin[0]
+        else:
+            largest = possible_origin[0]
+            for word in possible_origin:
+                if (len(largest) < len(word)):
+                    largest = word
+            return largest
