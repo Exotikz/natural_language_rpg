@@ -258,7 +258,9 @@ class Character:
         for phrase in phrases:
             tagged_sentence = pos_tag(split_words(phrase))
             possible_origin = [word for word, pos in tagged_sentence if pos == 'NNP']
-        if len(possible_origin) == 1:
+        if len(possible_origin) == 0:
+            return "Aucune place trouvée"
+        elif len(possible_origin) == 1:
             return possible_origin[0]
         else:
             largest = possible_origin[0]
